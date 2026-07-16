@@ -1,0 +1,477 @@
+{
+  "EMP001": {
+    "role": "IT_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Server_Admin",
+      "Network_Config",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 133.03333333333333,
+    "download_std": 49.56394917146196,
+    "role_dl_p95": 190.2
+  },
+  "EMP002": {
+    "role": "IT_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Server_Admin",
+      "Network_Config",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 100.9,
+    "download_std": 25.014961040586673,
+    "role_dl_p95": 190.2
+  },
+  "EMP003": {
+    "role": "IT_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Server_Admin",
+      "Network_Config",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 92.2,
+    "download_std": 37.92769891289987,
+    "role_dl_p95": 190.2
+  },
+  "EMP004": {
+    "role": "IT_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Server_Admin",
+      "Network_Config",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 113.76666666666667,
+    "download_std": 36.23170961477246,
+    "role_dl_p95": 190.2
+  },
+  "EMP005": {
+    "role": "IT_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Server_Admin",
+      "Network_Config",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 147.1,
+    "download_std": 34.96140729432956,
+    "role_dl_p95": 190.2
+  },
+  "EMP006": {
+    "role": "DB_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 113.76666666666667,
+    "download_std": 145.74769965259483,
+    "role_dl_p95": 138.0
+  },
+  "EMP007": {
+    "role": "DB_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 85.2,
+    "download_std": 26.75224773025044,
+    "role_dl_p95": 138.0
+  },
+  "EMP008": {
+    "role": "DB_Admin",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB",
+      "Backup_Systems"
+    ],
+    "systems_ever_seen": [
+      "Backup_Systems",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 87.03333333333333,
+    "download_std": 26.424235653752742,
+    "role_dl_p95": 138.0
+  },
+  "EMP009": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 9.4,
+    "download_std": 3.8560297609382355,
+    "role_dl_p95": 14.0
+  },
+  "EMP010": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 8.0,
+    "download_std": 3.6765801200722317,
+    "role_dl_p95": 14.0
+  },
+  "EMP011": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 8.633333333333333,
+    "download_std": 4.23029576966559,
+    "role_dl_p95": 14.0
+  },
+  "EMP012": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 7.9,
+    "download_std": 4.4439032237515,
+    "role_dl_p95": 14.0
+  },
+  "EMP013": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 6.833333333333333,
+    "download_std": 3.184914152833564,
+    "role_dl_p95": 14.0
+  },
+  "EMP014": {
+    "role": "HR_Staff",
+    "allowed_systems": [
+      "HR_System",
+      "Payroll",
+      "Employee_Records"
+    ],
+    "systems_ever_seen": [
+      "Employee_Records",
+      "HR_System",
+      "Payroll"
+    ],
+    "download_mean": 5.766666666666667,
+    "download_std": 3.5881349812511454,
+    "role_dl_p95": 14.0
+  },
+  "EMP015": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 4.366666666666666,
+    "download_std": 3.0567430642629323,
+    "role_dl_p95": 10.0
+  },
+  "EMP016": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 8.333333333333334,
+    "download_std": 7.756347048722735,
+    "role_dl_p95": 10.0
+  },
+  "EMP017": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 3.9,
+    "download_std": 2.2182627561162396,
+    "role_dl_p95": 10.0
+  },
+  "EMP018": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 5.4,
+    "download_std": 2.7367234373267957,
+    "role_dl_p95": 10.0
+  },
+  "EMP019": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 3.8333333333333335,
+    "download_std": 2.7428066839912586,
+    "role_dl_p95": 10.0
+  },
+  "EMP020": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 3.033333333333333,
+    "download_std": 3.034097415449409,
+    "role_dl_p95": 10.0
+  },
+  "EMP021": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 4.733333333333333,
+    "download_std": 3.2263284709246283,
+    "role_dl_p95": 10.0
+  },
+  "EMP022": {
+    "role": "Bank_Teller",
+    "allowed_systems": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "systems_ever_seen": [
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 5.266666666666667,
+    "download_std": 2.4059313679168897,
+    "role_dl_p95": 10.0
+  },
+  "EMP023": {
+    "role": "Compliance_Officer",
+    "allowed_systems": [
+      "Audit_Logs",
+      "Core_Banking",
+      "Customer_DB",
+      "Compliance_Reports"
+    ],
+    "systems_ever_seen": [
+      "Audit_Logs",
+      "Compliance_Reports",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 13.0,
+    "download_std": 3.991370000733911,
+    "role_dl_p95": 24.0
+  },
+  "EMP024": {
+    "role": "Compliance_Officer",
+    "allowed_systems": [
+      "Audit_Logs",
+      "Core_Banking",
+      "Customer_DB",
+      "Compliance_Reports"
+    ],
+    "systems_ever_seen": [
+      "Audit_Logs",
+      "Compliance_Reports",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 13.533333333333333,
+    "download_std": 5.544387241621698,
+    "role_dl_p95": 24.0
+  },
+  "EMP025": {
+    "role": "Compliance_Officer",
+    "allowed_systems": [
+      "Audit_Logs",
+      "Core_Banking",
+      "Customer_DB",
+      "Compliance_Reports"
+    ],
+    "systems_ever_seen": [
+      "Audit_Logs",
+      "Compliance_Reports",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 15.033333333333333,
+    "download_std": 4.759624248667719,
+    "role_dl_p95": 24.0
+  },
+  "EMP026": {
+    "role": "Compliance_Officer",
+    "allowed_systems": [
+      "Audit_Logs",
+      "Core_Banking",
+      "Customer_DB",
+      "Compliance_Reports"
+    ],
+    "systems_ever_seen": [
+      "Audit_Logs",
+      "Compliance_Reports",
+      "Core_Banking",
+      "Customer_DB"
+    ],
+    "download_mean": 16.7,
+    "download_std": 4.843410027001139,
+    "role_dl_p95": 24.0
+  },
+  "EMP027": {
+    "role": "Vendor",
+    "allowed_systems": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "systems_ever_seen": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 8.733333333333333,
+    "download_std": 3.94735470858679,
+    "role_dl_p95": 18.0
+  },
+  "EMP028": {
+    "role": "Vendor",
+    "allowed_systems": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "systems_ever_seen": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 9.533333333333333,
+    "download_std": 5.575397516882933,
+    "role_dl_p95": 18.0
+  },
+  "EMP029": {
+    "role": "Vendor",
+    "allowed_systems": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "systems_ever_seen": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 8.933333333333334,
+    "download_std": 6.324191829700502,
+    "role_dl_p95": 18.0
+  },
+  "EMP030": {
+    "role": "Vendor",
+    "allowed_systems": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "systems_ever_seen": [
+      "Network_Config",
+      "Server_Admin"
+    ],
+    "download_mean": 6.866666666666666,
+    "download_std": 5.697751119177807,
+    "role_dl_p95": 18.0
+  }
+}

@@ -1,0 +1,15 @@
+[
+  "login_hour",
+  "is_off_hours",
+  "is_weekend",
+  "session_duration_min",
+  "num_systems_accessed",
+  "role_mismatch_count",
+  "new_system_flag",
+  "num_files_downloaded",
+  "sensitivity_score",
+  "failed_logins",
+  "privilege_escalation_flag",
+  "download_zscore_personal",
+  "download_zscore_role"
+]
