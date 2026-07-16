@@ -463,7 +463,7 @@ export default function App() {
   const [auditLogs, setAuditLogs] = useState([]);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8000/ws/stream");
+    const ws = new WebSocket("wss://project-aegis-rnw6.onrender.com/ws/stream");
     
     ws.onmessage = (e) => {
       try {
