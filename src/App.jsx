@@ -956,14 +956,15 @@ export default function App() {
         {/* Floating Side Nav */}
         <aside className="hidden lg:flex flex-col items-center py-6 px-3 bg-white/30 backdrop-blur-[40px] border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.04)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.9)] rounded-[32px] gap-4 shrink-0 w-20">
           <nav className="flex flex-col gap-4 w-full items-center">
-            {[Cpu, Grid, Activity].map((Icon, i) => {
-              const isActive = (i === 2 && activePage === 'dashboard') || (i === 1 && activePage === 'users') || (i === 0 && activePage === 'quantum');
+            {[Activity, Grid, Cpu].map((Icon, i) => {
+              const pageName = i === 0 ? 'dashboard' : i === 1 ? 'users' : 'quantum';
+              const isActive = activePage === pageName;
               return (
                 <button 
                   key={i} 
-                  onClick={() => i === 1 ? setActivePage('users') : i === 2 ? setActivePage('dashboard') : setActivePage('quantum')}
+                  onClick={() => setActivePage(pageName)}
                   className={`p-3 rounded-2xl transition-all shadow-md ${isActive ? 'bg-slate-900 text-white' : 'bg-white/50 text-slate-500 hover:bg-slate-900 hover:text-white'}`}
-                  title={i === 1 ? 'Users' : i === 2 ? 'Dashboard' : 'Quantum'}
+                  title={i === 0 ? 'Dashboard' : i === 1 ? 'Users' : 'Quantum'}
                 >
                   <Icon className="w-5 h-5" strokeWidth={isActive ? 2 : 1.5} />
                 </button>
