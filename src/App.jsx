@@ -4,7 +4,7 @@ import {
   ShieldAlert, ShieldCheck, BrainCircuit, Crosshair, 
   LockKeyhole, Activity, Fingerprint, MoreVertical, 
   ChevronDown, Server, Network, AlertTriangle, CheckCircle2,
-  Terminal, Shield, Zap, Target, Check, X, Clock, Database, Users, Trash, Cpu, Lock
+  Terminal, Shield, Zap, Target, Check, X, Clock, Database, Users, Trash, Cpu, Lock, Unlock
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, 
@@ -32,16 +32,19 @@ const behavioralData = [
 // Dynamic Users Data from Baseline
 import employeeBaselines from '../employee_baselines.json';
 
-const mockUsers = Object.entries(employeeBaselines).map(([emp_id, info]) => ({
-  id: emp_id,
-  name: `User ${emp_id}`,
-  role: info.role.includes('Admin') ? 'Admin' : 'Employee',
-  dept: info.role.replace('_', ' '),
-  risk: emp_id === 'EMP042' || emp_id === 'ADM_422' || emp_id === 'EMP025' ? 98 : 0,
-  status: 'Active',
-  activity: 'Awaiting telemetry...',
-  pendingRequest: info.role.includes('Admin') ? 'Core_Vault_01' : null
-}));
+const mockUsers = Object.entries(employeeBaselines).map(([emp_id, info]) => {
+  const isHighRisk = emp_id === 'EMP007' || emp_id === 'EMP015' || emp_id === 'EMP025';
+  return {
+    id: emp_id,
+    name: `User ${emp_id}`,
+    role: info.role.includes('Admin') ? 'Admin' : 'Employee',
+    dept: info.role.replace('_', ' '),
+    risk: isHighRisk ? 98 : 0,
+    status: isHighRisk ? 'Critical' : 'Active',
+    activity: isHighRisk ? 'Anomalous Activity Detected' : 'Awaiting telemetry...',
+    pendingRequest: info.role.includes('Admin') ? 'Core_Vault_01' : null
+  };
+});
 
 // Soft glass container
 const GlassCard = ({ children, className = "" }) => (
@@ -50,98 +53,331 @@ const GlassCard = ({ children, className = "" }) => (
   </div>
 );
 
-const QuantumSimulation = ({ quantumLogs }) => (
-  <GlassCard className="flex-1 p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-500">
-    <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
+
+
+const QuantumSimulation = ({ quantumLogs }) => {
+  const [simState, setSimState] = useState('idle'); // idle, normal, rsa, pqc
+  const [packetPos, setPacketPos] = useState(0); // 0 (start), 1 (middle), 2 (intercepted), 3 (vault)
+  const [attackProgress, setAttackProgress] = useState(0);
+  const [attackResult, setAttackResult] = useState(null); // null, 'cracked', 'held'
+
+  const resetSim = () => {
+    setSimState('idle');
+    setPacketPos(0);
+    setAttackProgress(0);
+    setAttackResult(null);
+  };
+
+  const runNormal = () => {
+    resetSim();
+    setSimState('normal');
+    setTimeout(() => setPacketPos(1), 500);
+    setTimeout(() => setPacketPos(3), 1500);
+    setTimeout(() => setSimState('idle'), 3000);
+  };
+
+  const runRSA = () => {
+    resetSim();
+    setSimState('rsa');
+    setTimeout(() => setPacketPos(1), 500);
+    setTimeout(() => setPacketPos(2), 1000); // Intercepted
     
-    <div className="flex justify-between items-center z-10 border-b border-white/20 pb-6">
-      <div>
-        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-          <Cpu className="w-8 h-8 text-indigo-600" />
-          Quantum Defense Grid
-        </h2>
-        <p className="text-slate-500 font-mono mt-2">FIPS 204 ML-DSA & FIPS 203 ML-KEM ACTIVE</p>
-      </div>
-      <div className="flex gap-2">
-        <div className="bg-white/50 text-indigo-700 border border-white/60 px-4 py-2 rounded-xl font-mono text-sm flex items-center gap-2 shadow-sm">
-          <div className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-          Lattice Tuned
-        </div>
-      </div>
-    </div>
+    // Shor's Algorithm running
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += 25;
+      setAttackProgress(prog);
+      if (prog >= 100) {
+        clearInterval(interval);
+        setAttackResult('cracked');
+      }
+    }, 400);
+  };
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 flex-1">
-      <div className="flex flex-col gap-6">
-        <div className="bg-white/40 border border-white/60 rounded-2xl p-6 backdrop-blur-md shadow-sm">
-          <h3 className="text-lg font-semibold text-slate-800 mb-3">How PQC Protects Your Identity Ledger</h3>
-          <p className="text-slate-600 text-sm leading-relaxed mb-4">
-            Traditional encryption relies on the difficulty of factoring large primes—a problem quantum computers will solve in seconds. Our active defense system utilizes <strong>Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM)</strong>.
-          </p>
-          <ul className="space-y-3 text-sm text-slate-700">
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> Ensures all internal state and ledger commits are quantum-safe.</li>
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> High-entropy lattice signatures defeat Shor's algorithm.</li>
-            <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> Real-time symmetric key rotation secured via ML-KEM encapsulation.</li>
-          </ul>
-        </div>
-        
-        <div className="flex-1 bg-white/40 border border-white/60 rounded-2xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[250px] shadow-sm">
-          {/* Central Animation */}
-          <div className="relative flex items-center justify-center w-32 h-32 mb-6 mt-4">
-            {/* Outer Spinning Ring */}
-            <div className="absolute inset-0 rounded-full border-[3px] border-indigo-500/20 border-t-indigo-600 animate-[spin_8s_linear_infinite]" />
-            {/* Inner Spinning Dashed Ring */}
-            <div className="absolute inset-4 rounded-full border-2 border-dashed border-emerald-500/40 animate-[spin_12s_linear_infinite_reverse]" />
-            
-            {/* Core Shield */}
-            <div className="absolute inset-0 flex items-center justify-center animate-pulse">
-              <Shield className="w-16 h-16 text-indigo-600 drop-shadow-md" strokeWidth={1.5} />
-              <Lock className="w-6 h-6 text-white absolute" strokeWidth={2.5} />
-            </div>
-            
-            {/* Hovering Data Packets */}
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.8)] animate-bounce" />
-          </div>
+  const runPQC = () => {
+    resetSim();
+    setSimState('pqc');
+    setTimeout(() => setPacketPos(1), 500);
+    setTimeout(() => setPacketPos(2), 1000); // Intercepted
+    
+    // Shor's Algorithm failing
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += 15;
+      setAttackProgress(prog);
+      if (prog >= 45) {
+        clearInterval(interval);
+        setAttackResult('held');
+        setTimeout(() => setPacketPos(3), 1000);
+        setTimeout(() => resetSim(), 4000);
+      }
+    }, 400);
+  };
 
-          {/* Harvest Now Decrypt Never Badge */}
-          <div className="text-center z-10 flex flex-col items-center gap-3">
-            <span className="bg-indigo-100 text-indigo-700 font-bold text-xs tracking-widest px-4 py-2 rounded-full border border-indigo-200 shadow-sm uppercase w-max">
-              Harvest Now, Decrypt Never
-            </span>
-            <div className="text-slate-500 font-mono text-xs">
-              [ MULTI-DIMENSIONAL LATTICE ACTIVE ]
-            </div>
-          </div>
+  const runDSA = () => {
+    resetSim();
+    setSimState('dsa');
+    setTimeout(() => setPacketPos(1), 500);
+    setTimeout(() => setPacketPos(2), 1000); // Intercepted for signature validation
+    
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += 20;
+      setAttackProgress(prog);
+      if (prog >= 100) {
+        clearInterval(interval);
+        setAttackResult('dsa_verified');
+        setTimeout(() => setPacketPos(3), 1000);
+        setTimeout(() => resetSim(), 4000);
+      }
+    }, 400);
+  };
+
+  return (
+    <GlassCard className="flex-1 p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6 animate-in fade-in zoom-in-95 duration-500">
+      <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen" />
+      
+      <div className="flex justify-between items-center z-10 border-b border-white/20 pb-6">
+        <div>
+          <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+            <Cpu className="w-8 h-8 text-indigo-600" />
+            Interactive Quantum Threat Simulator
+          </h2>
+          <p className="text-slate-500 font-mono mt-2">FIPS 204 ML DSA-65 & FIPS 203 ML KEM-512 ACTIVE</p>
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 font-mono text-xs shadow-2xl relative overflow-hidden flex flex-col">
-        <div className="flex items-center gap-2 text-slate-400 mb-6 pb-4 border-b border-slate-800">
-          <Terminal className="w-4 h-4" />
-          <span className="font-semibold text-sm">pqc_vault_d.sh</span>
-        </div>
-        <div className="flex-1 flex flex-col gap-3 overflow-y-auto">
-          {quantumLogs.map((log) => (
-            <div key={log.id} className="flex gap-4 items-start">
-              <span className="text-slate-600 shrink-0">[{log.time}]</span>
-              <div className="flex flex-col gap-1">
-                <span className="text-indigo-400">{log.msg}</span>
-                {log.signature && (
-                  <span className="text-indigo-200 break-all text-[10px] bg-indigo-500/20 p-1 rounded inline-block w-fit">
-                    {log.signature}
-                  </span>
-                )}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 z-10 flex-1">
+        {/* Left Side: Controls & Info (Full height matching visualizer) */}
+        <div className="lg:col-span-1 flex flex-col h-full">
+          <div className="bg-white/40 border border-white/60 rounded-2xl p-5 backdrop-blur-md shadow-sm h-full flex flex-col justify-between">
+            <div className="flex flex-col h-full flex-1">
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Select Scenario</h3>
+              <div className="flex flex-col gap-4 flex-1">
+                <button 
+                  onClick={runNormal}
+                  disabled={simState !== 'idle'}
+                  className="flex-1 flex items-center justify-between px-5 py-2 rounded-xl bg-slate-800 text-white hover:bg-slate-700 transition-colors disabled:opacity-50 text-left"
+                >
+                  <div>
+                    <div className="font-semibold text-base">Normal Flow</div>
+                    <div className="text-xs text-slate-400">Standard safe encryption.</div>
+                  </div>
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
+                </button>
+                
+                <button 
+                  onClick={runRSA}
+                  disabled={simState !== 'idle'}
+                  className="flex-1 flex items-center justify-between px-5 py-2 rounded-xl bg-rose-500/10 text-rose-700 border border-rose-500/20 hover:bg-rose-500/20 transition-colors disabled:opacity-50 text-left"
+                >
+                  <div>
+                    <div className="font-semibold text-base">RSA-2048 Attack (SNDL)</div>
+                    <div className="text-xs opacity-80">Shor's Algorithm breaking RSA.</div>
+                  </div>
+                  <AlertTriangle className="w-6 h-6 shrink-0" />
+                </button>
+
+                <button 
+                  onClick={runPQC}
+                  disabled={simState !== 'idle'}
+                  className="flex-1 flex items-center justify-between px-5 py-2 rounded-xl bg-indigo-500/10 text-indigo-700 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors disabled:opacity-50 text-left"
+                >
+                  <div>
+                    <div className="font-semibold text-base">Aegis ML KEM-512</div>
+                    <div className="text-xs opacity-80">Quantum key encapsulation.</div>
+                  </div>
+                  <Shield className="w-6 h-6 shrink-0" />
+                </button>
+
+                <button 
+                  onClick={runDSA}
+                  disabled={simState !== 'idle'}
+                  className="flex-1 flex items-center justify-between px-5 py-2 rounded-xl bg-purple-500/10 text-purple-700 border border-purple-500/20 hover:bg-purple-500/20 transition-colors disabled:opacity-50 text-left"
+                >
+                  <div>
+                    <div className="font-semibold text-base">Aegis ML DSA-65</div>
+                    <div className="text-xs opacity-80">Post-quantum digital signature.</div>
+                  </div>
+                  <Fingerprint className="w-6 h-6 shrink-0" />
+                </button>
               </div>
             </div>
-          ))}
-          <div className="flex gap-2 text-slate-500 animate-pulse mt-2">
-            <span>&gt;</span>
-            <span>Awaiting next cryptographic cycle...</span>
+
+            {simState !== 'idle' && (
+              <button onClick={resetSim} className="text-xs text-center text-slate-500 hover:text-slate-800 mt-4 font-medium py-1">
+                Reset Simulator
+              </button>
+            )}
           </div>
         </div>
+        
+        {/* Right Side: Visualizer (Wider 2/3 column) */}
+        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-8 relative overflow-hidden flex flex-col shadow-2xl min-h-[520px]">
+          
+          {/* Animated Background Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:2rem_2rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
+          
+          {/* Attacker Node (Drops down if attack) */}
+          <div className={`absolute top-6 left-[40%] -translate-x-1/2 transition-all duration-700 flex flex-col items-center ${simState === 'rsa' || simState === 'pqc' ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-10 scale-90'}`}>
+            <div className="w-16 h-16 rounded-2xl bg-rose-950 border border-rose-500 flex items-center justify-center shadow-[0_0_40px_rgba(225,29,72,0.4)] z-20 relative">
+              <Cpu className="w-8 h-8 text-rose-500" />
+              <div className="absolute inset-0 rounded-2xl border border-rose-500 animate-ping opacity-20" />
+            </div>
+            <div className="text-rose-500 font-mono text-xs mt-3 font-bold bg-slate-950 px-3 py-1 rounded-full border border-rose-900 shadow-sm z-20">QUANTUM ADVERSARY</div>
+          </div>
+          
+          {/* Main Horizontal Track */}
+          <div className="absolute top-[60%] left-[15%] right-[15%] h-1 bg-slate-800 rounded-full -translate-y-1/2 z-0 overflow-hidden">
+            <div className={`h-full bg-indigo-500/50 w-[35%] transition-all duration-1000 ${packetPos > 0 ? 'translate-x-0' : '-translate-x-full'}`} />
+            <div className={`h-full bg-emerald-500/50 w-[40%] ml-auto transition-all duration-1000 delay-500 ${packetPos === 3 ? 'translate-x-0' : 'translate-x-full'}`} />
+          </div>
+          
+          {/* Intercept Beam */}
+          <div className={`absolute top-24 bottom-[40%] left-[40%] w-1 -translate-x-1/2 transition-all duration-500 bg-gradient-to-b from-rose-500/80 to-transparent z-0 ${(simState === 'rsa' || simState === 'pqc') && packetPos >= 1 ? 'opacity-100 animate-pulse' : 'opacity-0'}`} />
+
+          {/* Nodes Container */}
+          <div className="absolute top-[60%] -translate-y-1/2 left-0 right-0 flex items-center justify-between px-[10%] z-10">
+            {/* Employee Node */}
+            <div className="flex flex-col items-center w-24">
+              <div className="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center z-10 relative">
+                <User className="w-8 h-8 text-slate-400" />
+                {packetPos === 0 && <div className="absolute inset-0 rounded-full border border-slate-500 animate-ping opacity-30" />}
+              </div>
+              <div className="text-slate-400 font-mono text-xs mt-3 font-semibold tracking-wider">EMPLOYEE</div>
+            </div>
+            
+            {/* Encryption Node */}
+            <div className="flex flex-col items-center w-32 relative">
+              <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full scale-150" />
+              <div className="w-16 h-16 rounded-2xl bg-slate-900 border-2 border-indigo-500 flex items-center justify-center z-10 relative shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+                <Shield className="w-8 h-8 text-indigo-400" />
+              </div>
+              <div className="text-indigo-400 font-mono text-xs mt-3 text-center font-bold tracking-wider relative z-10">ENCRYPTION<br/>LAYER</div>
+            </div>
+
+            {/* Vault Node */}
+            <div className="flex flex-col items-center w-24 relative">
+              <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full scale-150" />
+              <div className="w-20 h-20 rounded-xl bg-slate-900 border-2 border-emerald-500 flex items-center justify-center z-10 relative shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+                <Database className="w-10 h-10 text-emerald-400" />
+              </div>
+              <div className="text-emerald-400 font-mono text-xs mt-3 font-bold tracking-wider relative z-10">QUANTUM<br/>VAULT</div>
+            </div>
+          </div>
+
+          {/* Floating Attack Progress & Results */}
+          {(simState === 'rsa' || simState === 'pqc') && packetPos >= 1 && (
+            <div className="absolute top-[35%] left-[40%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-40 w-full pointer-events-none">
+              
+              {/* Shor's Algorithm Progress */}
+              {packetPos === 2 && attackResult === null && (
+                <div className="w-56 bg-slate-900/90 backdrop-blur-md rounded-full h-3 border border-slate-700 overflow-hidden relative shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                  <div 
+                    className="h-full bg-amber-500 transition-all duration-300" 
+                    style={{ width: `${attackProgress}%` }}
+                  />
+                </div>
+              )}
+              
+              {/* Attack Results Text */}
+              {attackResult === 'cracked' && (
+                <div className="text-rose-500 font-mono text-xs font-bold animate-in zoom-in text-center bg-rose-950/90 backdrop-blur-md px-6 py-3 rounded-xl border border-rose-500 shadow-[0_0_30px_rgba(225,29,72,0.6)]">
+                  <span className="text-rose-400 block mb-1">SHOR'S ALGORITHM SUCCESS</span>
+                  <span className="text-white text-sm">RSA-2048 BROKEN</span>
+                </div>
+              )}
+              {attackResult === 'held' && (
+                <div className="text-indigo-400 font-mono text-xs font-bold animate-in zoom-in text-center bg-indigo-950/90 backdrop-blur-md px-6 py-3 rounded-xl border border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.6)]">
+                  <span className="text-indigo-300 block mb-1">LATTICE ENCAPSULATION HELD</span>
+                  <span className="text-white text-sm">ATTACK FAILED</span>
+                </div>
+              )}
+              {attackResult === 'dsa_verified' && (
+                <div className="text-purple-400 font-mono text-xs font-bold animate-in zoom-in text-center bg-purple-950/90 backdrop-blur-md px-6 py-3 rounded-xl border border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.6)]">
+                  <span className="text-purple-300 block mb-1">FIPS 204 ML DSA-65 VERIFIED</span>
+                  <span className="text-white text-sm">IDENTITY AUTHENTICATED</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Data Packet */}
+          <div 
+            className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-in-out flex items-center justify-center z-30"
+            style={{
+              left: packetPos === 0 ? '15%' : packetPos === 1 ? '40%' : packetPos === 2 ? '40%' : '85%',
+              top: packetPos === 2 ? '60%' : '60%',
+              opacity: packetPos === 0 && simState === 'idle' ? 0 : 1,
+              transform: `translate(-50%, -50%) scale(${packetPos === 2 ? 1.4 : 1})`
+            }}
+          >
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${
+              packetPos === 0 ? 'bg-slate-300 shadow-[0_0_15px_rgba(203,213,225,0.6)]' : 
+              attackResult === 'cracked' ? 'bg-rose-500 shadow-[0_0_30px_rgba(225,29,72,0.9)]' : 
+              'bg-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.9)]'
+            }`}>
+              {packetPos > 0 && attackResult !== 'cracked' && <Lock className="w-5 h-5 text-white" />}
+              {attackResult === 'cracked' && <Unlock className="w-5 h-5 text-white animate-pulse" />}
+            </div>
+          </div>
+          
+          {/* Bottom Explanation Panel */}
+          <div className="mt-auto pt-8 z-20">
+            <div className="bg-slate-950/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 text-center">
+              {simState === 'idle' && (
+                <p className="text-slate-400 text-sm">Select a scenario on the left to begin the simulation.</p>
+              )}
+              {simState === 'normal' && (
+                <p className="text-emerald-400 text-sm font-medium">
+                  Normal Operation: Data is encrypted and safely stored in the vault.<br/>
+                  <span className="text-slate-400 text-xs font-normal">No active threats detected.</span>
+                </p>
+              )}
+              {simState === 'rsa' && attackResult !== 'cracked' && (
+                <p className="text-amber-400 text-sm font-medium">
+                  SNDL Attack: Attacker intercepts standard AES/RSA encrypted data.<br/>
+                  <span className="text-slate-400 text-xs font-normal">A quantum computer begins factoring the prime numbers to break the key...</span>
+                </p>
+              )}
+              {simState === 'rsa' && attackResult === 'cracked' && (
+                <p className="text-rose-400 text-sm font-medium">
+                  Data Compromised: The quantum computer broke the AES/RSA encryption in seconds.<br/>
+                  <span className="text-slate-400 text-xs font-normal">The attacker now has full access to the plain text data.</span>
+                </p>
+              )}
+              {simState === 'pqc' && attackResult !== 'held' && (
+                <p className="text-amber-400 text-sm font-medium">
+                  Quantum Attack: Attacker intercepts Aegis ML-KEM encrypted data.<br/>
+                  <span className="text-slate-400 text-xs font-normal">A quantum computer attempts to break the multi-dimensional lattice...</span>
+                </p>
+              )}
+              {simState === 'pqc' && attackResult === 'held' && (
+                <p className="text-indigo-400 text-sm font-medium">
+                  Data Secured: The complex ML-KEM lattice cannot be broken by Shor's Algorithm.<br/>
+                  <span className="text-slate-400 text-xs font-normal">The encrypted data remains perfectly safe inside the Quantum Vault.</span>
+                </p>
+              )}
+              {simState === 'dsa' && attackResult !== 'dsa_verified' && (
+                <p className="text-purple-400 text-sm font-medium">
+                  Digital Signature Check: Validating identity using FIPS 204 ML DSA-65.<br/>
+                  <span className="text-slate-400 text-xs font-normal">Attacker attempts to forge identity signature key...</span>
+                </p>
+              )}
+              {simState === 'dsa' && attackResult === 'dsa_verified' && (
+                <p className="text-purple-400 text-sm font-medium">
+                  Identity Authenticated: ML DSA-65 signature verified authentic.<br/>
+                  <span className="text-slate-400 text-xs font-normal">Quantum computers cannot forge lattice-based identity proofs.</span>
+                </p>
+              )}
+            </div>
+          </div>
+          
+        </div>
       </div>
-    </div>
-  </GlassCard>
-);
+    </GlassCard>
+  );
+};
 
 const UserDatabase = ({ usersList, setUsersList }) => {
   const [authStatus, setAuthStatus] = useState('pending');
@@ -441,6 +677,119 @@ export default function App() {
   const [usersList, setUsersList] = useState(mockUsers);
   const [telemetryData, setTelemetryData] = useState([]);
   const [mainThreatKilled, setMainThreatKilled] = useState(false);
+
+  const triggerSimulation = () => {
+    // Phase 1 (0ms) - Initial Anomaly (Supply Chain Worm)
+    setTimeout(() => {
+      const t = new Date().toLocaleTimeString([], { hour12: false });
+      setTelemetryData(prev => [...prev, { time: t.slice(0, 8), risk: 65, volume: 500 }].slice(-20));
+      setGlobalStats(prev => ({...prev, totalEvents: prev.totalEvents + 1, avgRisk: 45}));
+      setActiveAlerts(prev => [{ id: `ALT-WRN-${Math.floor(Math.random()*1000)}`, user: 'EMP001', trap: 'Abnormal Volume Spike', ip: '10.0.0.99', time: 'Just now', severity: 'warning' }, ...prev].slice(0, 4));
+    }, 0);
+
+    // Phase 2 (800ms) - Lateral Movement (Worm spreading)
+    setTimeout(() => {
+      const t = new Date().toLocaleTimeString([], { hour12: false });
+      setTelemetryData(prev => [...prev, { time: t.slice(0, 8), risk: 85, volume: 2000 }].slice(-20));
+      setLiveRadar([
+        { subject: 'API Volume', A: 100, B: 40, fullMark: 150 },
+        { subject: 'Anomaly Score', A: 80, B: 30, fullMark: 150 },
+        { subject: 'Rule Score', A: 40, B: 20, fullMark: 150 },
+        { subject: 'Sensitivity', A: 60, B: 50, fullMark: 150 },
+        { subject: 'Geo Anomaly', A: 40, B: 45, fullMark: 150 },
+      ]);
+      setUsersList(prevList => prevList.map(u => 
+        ['EMP001', 'EMP002', 'EMP003'].includes(u.id) ? { ...u, risk: 85, status: 'Active', activity: 'Lateral Movement Detected' } : u
+      ));
+      setHoneytokens(prev => {
+        const next = [...prev];
+        next[42] = true; next[17] = true;
+        return next;
+      });
+    }, 800);
+
+    // Phase 3 (1800ms) - Insider Threat Data Exfiltration
+    setTimeout(() => {
+      const t = new Date().toLocaleTimeString([], { hour12: false });
+      setTelemetryData(prev => [...prev, { time: t.slice(0, 8), risk: 92, volume: 3000 }].slice(-20));
+      setLiveRadar([
+        { subject: 'API Volume', A: 120, B: 40, fullMark: 150 },
+        { subject: 'Anomaly Score', A: 150, B: 30, fullMark: 150 },
+        { subject: 'Rule Score', A: 40, B: 20, fullMark: 150 },
+        { subject: 'Sensitivity', A: 90, B: 50, fullMark: 150 },
+        { subject: 'Geo Anomaly', A: 150, B: 45, fullMark: 150 },
+      ]);
+      setActiveAlerts(prev => [{ id: `ALT-GEO-${Math.floor(Math.random()*1000)}`, user: 'EMP007', trap: 'Massive DB Export (Admin)', ip: '198.51.100.14', time: 'Just now', severity: 'critical' }, ...prev].slice(0, 4));
+      setUsersList(prevList => prevList.map(u => u.id === 'EMP007' ? { ...u, risk: 95, status: 'Active', activity: 'Abnormal Geo-Login / DB Export' } : u));
+    }, 1800);
+
+    // Phase 4 (2800ms) - Ransomware Speed Run
+    setTimeout(() => {
+      const t = new Date().toLocaleTimeString([], { hour12: false });
+      setTelemetryData(prev => [...prev, { time: t.slice(0, 8), risk: 98, volume: 4500 }].slice(-20));
+      setLiveRadar([
+        { subject: 'API Volume', A: 140, B: 40, fullMark: 150 },
+        { subject: 'Anomaly Score', A: 150, B: 30, fullMark: 150 },
+        { subject: 'Rule Score', A: 150, B: 20, fullMark: 150 },
+        { subject: 'Sensitivity', A: 150, B: 50, fullMark: 150 },
+        { subject: 'Geo Anomaly', A: 150, B: 45, fullMark: 150 },
+      ]);
+      setActiveAlerts(prev => [{ id: `ALT-RANSOM-${Math.floor(Math.random()*1000)}`, user: 'EMP015', trap: 'High-Freq File Encryption', ip: '10.0.1.22', time: 'Just now', severity: 'critical' }, ...prev].slice(0, 4));
+      setUsersList(prevList => prevList.map(u => u.id === 'EMP015' ? { ...u, risk: 99, status: 'Critical', activity: 'Ransomware Execution' } : u));
+      setHoneytokens(prev => {
+        const next = [...prev];
+        next[55] = true; next[2] = true; next[99] = true;
+        return next;
+      });
+    }, 2800);
+
+    // Phase 5 (3800ms) - Full Lockdown (Aegis Action)
+    setTimeout(() => {
+      const t = new Date().toLocaleTimeString([], { hour12: false });
+      setTelemetryData(prev => [...prev, { time: t.slice(0, 8), risk: 100, volume: 5500 }].slice(-20));
+      setGlobalStats(prev => ({...prev, activeThreats: prev.activeThreats + 3, systems: prev.systems + 12, avgRisk: 99}));
+      
+      setQuantumLogs(prev => [
+        { id: Date.now()+1, time: t, msg: `CRITICAL: Ransomware isolated.`, signature: "0xPQC" + Math.random().toString(16).slice(2, 10).toUpperCase(), risk_tier: "HIGH" },
+        { id: Date.now()+2, time: t, msg: `CRITICAL: Data Exfil stopped.`, signature: "0xPQC" + Math.random().toString(16).slice(2, 10).toUpperCase(), risk_tier: "HIGH" },
+        { id: Date.now()+3, time: t, msg: `CRITICAL: Worm propagation halted.`, signature: "0xPQC" + Math.random().toString(16).slice(2, 10).toUpperCase(), risk_tier: "HIGH" },
+        ...prev
+      ].slice(0, 8));
+
+      setAuditLogs(prev => [
+        { id: Date.now()+1, action: 'Multi-Vector Attack - ALL SESSIONS KILLED', target: 'GLOBAL', time: t, status: 'warning' },
+        ...prev
+      ].slice(0, 5));
+      
+      setUsersList(prevList => prevList.map(u => 
+        ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005', 'EMP007', 'EMP015'].includes(u.id) ? { ...u, risk: 100, status: 'Critical', activity: 'Aegis Quantum Lockdown Executed' } : u
+      ));
+      setHoneytokens(prev => {
+        const next = [...prev];
+        next[88] = true; next[5] = true; next[23] = true; next[77] = true;
+        return next;
+      });
+      setMainThreatKilled(true);
+    }, 3800);
+  };
+
+  const resetSimulation = () => {
+    setMainThreatKilled(false);
+    setUsersList(mockUsers);
+    setTelemetryData([]);
+    setQuantumLogs([]);
+    setActiveAlerts([]);
+    setAuditLogs([]);
+    setHoneytokens(Array.from({ length: 100 }, () => false));
+    setGlobalStats({ totalEvents: 0, activeThreats: 0, avgRisk: 0, systems: 0 });
+    setLiveRadar([
+      { subject: 'API Volume', A: 0, B: 40, fullMark: 150 },
+      { subject: 'Anomaly Score', A: 0, B: 30, fullMark: 150 },
+      { subject: 'Rule Score', A: 0, B: 20, fullMark: 150 },
+      { subject: 'Sensitivity', A: 0, B: 50, fullMark: 150 },
+      { subject: 'Geo Anomaly', A: 0, B: 45, fullMark: 150 },
+    ]);
+  };
   
   const [globalStats, setGlobalStats] = useState({
     totalEvents: 0,
@@ -536,9 +885,9 @@ export default function App() {
             if (u.id === data.event.employee_id) {
               return { 
                 ...u, 
-                risk: data.final_risk_score >= 25 ? 100 : data.final_risk_score, 
-                status: data.final_risk_score >= 25 ? 'Critical' : u.status,
-                activity: data.final_risk_score >= 25 ? 'Honeytoken Tripped - Critical Threat' : (data.final_risk_score >= 35 ? data.reasons[0] || 'Anomalous Activity' : 'Normal Telemetry')
+                risk: data.final_risk_score, 
+                status: data.final_risk_score >= 65 ? 'Critical' : 'Active',
+                activity: data.final_risk_score >= 65 ? 'Critical Threat Isolated' : (data.final_risk_score >= 35 ? data.reasons[0] || 'Anomalous Activity' : 'Normal Telemetry')
               };
             }
             return u;
@@ -614,11 +963,22 @@ export default function App() {
                   key={i} 
                   onClick={() => i === 1 ? setActivePage('users') : i === 2 ? setActivePage('dashboard') : setActivePage('quantum')}
                   className={`p-3 rounded-2xl transition-all shadow-md ${isActive ? 'bg-slate-900 text-white' : 'bg-white/50 text-slate-500 hover:bg-slate-900 hover:text-white'}`}
+                  title={i === 1 ? 'Users' : i === 2 ? 'Dashboard' : 'Quantum'}
                 >
                   <Icon className="w-5 h-5" strokeWidth={isActive ? 2 : 1.5} />
                 </button>
               );
             })}
+            
+            {/* Simulation Injector Button */}
+            <div className="w-8 border-t border-slate-300/50 my-2"></div>
+            <button 
+              onClick={triggerSimulation}
+              className="p-3 rounded-2xl transition-all shadow-md bg-rose-500/10 text-rose-600 hover:bg-rose-600 hover:text-white border border-rose-500/20 group relative"
+              title="Inject Malware Simulation"
+            >
+              <AlertTriangle className="w-5 h-5 group-hover:animate-pulse" strokeWidth={2} />
+            </button>
           </nav>
         </aside>
 
@@ -755,7 +1115,6 @@ export default function App() {
                     <AlertTriangle className="w-4 h-4 text-rose-500" />
                     Deception Intercepts
                   </h3>
-                  <button className="text-sm text-indigo-600 font-medium hover:text-indigo-700">View All</button>
                 </div>
                 
                 <div className="bg-slate-900 border border-slate-700 shadow-xl rounded-[16px] p-4 font-mono text-xs flex flex-col gap-2 max-h-[200px] overflow-y-auto">
