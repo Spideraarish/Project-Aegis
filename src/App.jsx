@@ -545,10 +545,15 @@ const UserDatabase = ({ usersList, setUsersList }) => {
                       <BrainCircuit className="w-4 h-4 animate-pulse" />
                       AI FLAG: High Risk - Anomalous time of access. Expected risk score spike.
                     </div>
-                  ) : (
+                  ) : authStatus === 'approved' ? (
                     <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-lg">
                       <CheckCircle2 className="w-4 h-4" />
                       AI FLAG CLEARED - Exception granted by User. Risk score normalized.
+                    </div>
+                  ) : (
+                    <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg">
+                      <X className="w-4 h-4" />
+                      ACCESS DENIED - Request blocked by Security Administrator.
                     </div>
                   )}
                 </div>
@@ -558,17 +563,17 @@ const UserDatabase = ({ usersList, setUsersList }) => {
                 <button 
                   onClick={() => setAuthStatus('denied')}
                   disabled={authStatus !== 'pending'}
-                  className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${authStatus === 'pending' ? 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm' : 'opacity-50 cursor-not-allowed bg-slate-100 text-slate-400'}`}
+                  className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${authStatus === 'pending' ? 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm' : authStatus === 'denied' ? 'bg-rose-500 text-white shadow-sm' : 'opacity-50 cursor-not-allowed bg-slate-100 text-slate-400'}`}
                 >
-                  <X className="w-4 h-4" /> Deny
+                  <X className="w-4 h-4" /> {authStatus === 'denied' ? 'Denied' : 'Deny'}
                 </button>
                 <button 
                   onClick={() => setAuthStatus('approved')}
                   disabled={authStatus !== 'pending'}
-                  className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${authStatus === 'pending' ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_0_15px_rgba(79,70,229,0.3)]' : 'bg-emerald-500 text-white shadow-sm'}`}
+                  className={`px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${authStatus === 'pending' ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_0_15px_rgba(79,70,229,0.3)]' : authStatus === 'approved' ? 'bg-emerald-500 text-white shadow-sm' : 'opacity-50 cursor-not-allowed bg-slate-100 text-slate-400'}`}
                 >
-                  {authStatus === 'pending' ? <Check className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                  {authStatus === 'pending' ? 'Override & Approve' : 'Approved'}
+                  {authStatus === 'approved' ? <CheckCircle2 className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+                  {authStatus === 'approved' ? 'Approved' : 'Override & Approve'}
                 </button>
               </div>
             </div>
