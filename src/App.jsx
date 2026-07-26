@@ -585,11 +585,6 @@ const UserDatabase = ({ usersList, setUsersList }) => {
           <GlassCard className="p-0 overflow-hidden flex flex-col h-full min-h-[400px]">
             <div className="p-6 border-b border-white/50 flex justify-between items-center bg-white/10">
               <h3 className="text-lg font-semibold text-slate-800">Identity Ledger</h3>
-              <div className="flex gap-2">
-                <button className="text-xs font-semibold bg-white/60 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-white text-slate-600 flex items-center gap-1.5 hover:bg-white transition-colors">
-                  <Database className="w-4 h-4" /> Export Ledger
-                </button>
-              </div>
             </div>
             
             <div className="overflow-x-auto">
